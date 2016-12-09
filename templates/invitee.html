@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="en">
+
+<head>
+    <title>Appointments</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css" />
+
+    <link rel="stylesheet" type="text/css" href="/static/css/busy.css" />
+
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>Meeting Scheduler</h1>
+        <text>You are given to the option to put in your calendars to help
+        the creator of this meeting see what time works best. By clicking the
+        choose busy calendars, you will select the most important calendars
+        that you can't skip in this range for the meeting and then be given the
+        option to see what times work best for you then given another option
+        to reselect or submit back to the creator.</br></br></text>
+        <text>The meeting time and range is unclickable for you so if you know
+        you are unavailable during these dates and times then you should
+        contact your meeting creator.</text>
+
+
+        <!--
+  -- If there are any warnings or other messages from a prior action,
+  -- they appear above the rest of the content, just until the next
+  -- action.
+  -->
+
+        <form action="/choose">
+          <h2>Date range:</h2>
+          {{session.daterange}}
+          <h4>Start Time</h4>
+          {{session.startTime}}
+          <h4>End Time</h4>
+          {{session.endTime}}
+          <br /><input type="submit" value="See Calendar" />
+      </form>
+
+        <!--
+    Show the calendar list (if we have it).  This will need to be turned into
+    a form from which calendars can be picked. Up to three entries are
+    shown in each row (but the order is across then down; I would
+    prefer down then across).
+-->
+        {% if g.calendars is defined %}
+        <div class="row">
+            <form action="/_get_busy_times" method="post">
+                {% for cal in g.calendars if cal.selected %}
+
+                <div class="col">
+                    <input name="calendar" type="checkbox" value="{{ cal.id }}"> {{ cal.summary }}
+                </div>
+                {% if loop.index is divisibleby 3%}
+                <div class="row"></div>
+                {% endif %} {% endfor %}
+                <input type="submit" value="Choose busy calendars"> <!-- onclick="loopForm(document.calendars);">-->
+            </form>
+        </div>
+        {% endif %}
+
+    <div>
+        {% if g.free_times is defined %}
+            <h3>Here are the meeting times available to you according to your calendar: </h3>
+            <form action="/invitee_end" method="post">
+                {% for time in g.free_times %}
+                    <div>
+                    {{time}}
+                    </div>
+                {% endfor %}
+                <p> </br>Press 'Submit' to go to the invitation page, press 'Choose'
+                    again if you would like to reselect your time/date/calendar choice.</p>
+                <input type="submit" value="Submit">
+            </form>
+        {% endif %}
+    </div>
+
+    <div id="slider">
+        <div id="custom-handle" class="ui-slider-handle"></div>
+    </div>
+    <!-- container (for bootstrap) -->
+</body>
+
+
+</html>

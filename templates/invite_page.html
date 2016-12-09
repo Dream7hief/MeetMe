@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="en">
+
+<head>
+    <title>Invite People!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css" />
+</head>
+
+<body>
+    <div class="container">
+
+    <h4>Here are links you may copy and paste and send to other users. You will
+    get notified when all of the users have finished entering in their free times.
+    You will be asked to select which time to set a meeting if there are multiple times
+    and if there are no times left, you will have to enter in a new range.</h4>
+
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul class=flashes>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %} {% endwith %}
+
+</body>
